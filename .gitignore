@@ -160,3 +160,5 @@ cython_debug/
 #.idea/
 /tests
 sqlite.db
+/tskbm.7z
+/db.sqlite
