@@ -23,7 +23,8 @@ class User(Base):
     fname: Mapped[str]
     pname: Mapped[str]
     last_checkout: Mapped[datetime]
-    watch: Mapped[int] = mapped_column(ForeignKey("watches.id"))
+    watch_id: Mapped[int] = mapped_column(ForeignKey("watches.id"))
+    watch: Mapped["Watch"] = relationship(uselist=False)
     # password: Mapped[str] = mapped_column(nullable=False)
 
 
@@ -31,4 +32,5 @@ class Watch(Base):
     __tablename__ = "watches"
     id: Mapped[int] = mapped_column(primary_key=True)
     ser_num: Mapped[str]
-    user: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    # user: Mapped[User] = relationship(uselist=False)
+    # user: Mapped[int] = mapped_column(ForeignKey("users.id"))
