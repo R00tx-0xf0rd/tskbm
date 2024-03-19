@@ -3,10 +3,10 @@ import datetime
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
-from db import User, Times
-from db import Watch
+from tskbm.db import User, Times
+from tskbm.db import Watch
 
-from data_models import UserModel
+from tskbm.data_models import UserModel
 
 
 async def get_user_by_tabnum(session: AsyncSession, tabnum: int) -> UserModel | None:
@@ -27,7 +27,9 @@ async def add_watch(session: AsyncSession, serial_number: str) -> int:
     return watch.id
 
 
-async def attach_watches_to_user_by_tabnum(session: AsyncSession, tabnum_in: int, watch_serial: str) -> bool:
+async def attach_watches_to_user_by_tabnum(
+    session: AsyncSession, tabnum_in: int, watch_serial: str
+) -> bool:
     stmt = select(User).filter(User.tabnum == tabnum_in)
     result = await session.execute(stmt)
     user = result.scalar()
@@ -44,9 +46,7 @@ async def attach_watches_to_user_by_tabnum(session: AsyncSession, tabnum_in: int
     return True
 
 
-async def create_user(session: AsyncSession,
-                      user_in: User
-                      ) -> int:
+async def create_user(session: AsyncSession, user_in: User) -> int:
     user_in.last_checkout = datetime.datetime.now()
     session.add(user_in)
     try:
