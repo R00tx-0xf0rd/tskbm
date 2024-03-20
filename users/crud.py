@@ -1,22 +1,37 @@
 import datetime
 
+from pydantic import ValidationError
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
-from tskbm.db import User, Times
-from tskbm.db import Watch
-
-from tskbm.data_models import UserModel
 
 
-async def get_user_by_tabnum(session: AsyncSession, tabnum: int) -> UserModel | None:
+from db import User, Times
+from db import Watch
+
+from data_models import UserModel, BaseUserModel, AllUsersModel
+
+
+async def get_all_users(session: AsyncSession) -> list[BaseUserModel]:
+    query = select(User).order_by(User.column)
+    result = await session.execute(query)
+    users = result.scalars().all()
+    print(users)
+    models = [BaseUserModel.model_validate(user) for user in users]
+    # mdls = AllUsersModel.model_validate(users)
+    return models
+
+
+async def get_user_by_tabnum(
+    session: AsyncSession, tabnum: int
+) -> BaseUserModel | None:
     # async with new_session() as session:
     # session.get(User).filter(tabnum == tabnum)
     query = select(User).filter(User.tabnum == tabnum)
     result = await session.execute(query)
     user = result.scalar()
     if user:
-        return UserModel.model_validate(user)
+        return BaseUserModel.model_validate(user)
     return None
 
 

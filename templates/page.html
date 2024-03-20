@@ -11,12 +11,18 @@ tskbm
 <h1>
     Приложение учета носимых частей ТСКБМ
 </h1>
+
+{% for item in data %}
+<p><b>{{ item.lname }} {{ item.fname }} {{item.pname }}: таб. № {{ item.tabnum }}, Колонна: {{ item.column }} </b></p>
 <ul>
-    {% for item in data %}
-    <li>{{item}}</li>
+    {% for value in data["times"] %}
+    <li><b>{{ value["checkout_time" ]}}</b></li>
     {% endfor %}
 </ul>
-{{data[0]["page"]}}
+{% endfor %}
+<p>Total: {{ data.times.__len__() }}</p>
+
+<div><p>extra data: {{ extra }}</p></div>
 {% endblock %}
 
 

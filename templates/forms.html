@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% set active_page = "forms" %}
+
+{% block title %}Two Forms{% endblock %}
+
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block content %}
+{% if data %}
+<p><b>{{ data.lname }} {{ data.fname }} {{data.pname }}: таб. № {{ data.tabnum }}, Колонна: {{ data.column }} </b></p>
+<ul>
+    {% for value in data["times"] %}
+    <li><b>{{ value["checkout_time" ]}}</b></li>
+    {% endfor %}
+</ul>
+{% endif %}
+<h4>Периоды поверки по т.н.</h4>
+<form action="/form1" method="post">
+    <label for="tn">Tabnum:</label>
+    <input type="text" name="tabnum" id="tn" value="" required />
+    <input type="submit" value="Найти">
+</form>
+
+{% if mash %}
+<br>
+<div> Пользователь успешно создан.</div>
+{% endif %}
+<h4>Добавление машиниста в БД</h4>
+<form action="/form2" method="post">
+    <label for="tn1">Таб. номер:</label>
+    <input type="text" name="tabnum" id = "tn1" value="" required />
+    <label for="col">Колонна:</label>
+    <input type="text" name="column" id = "col"  value="" required />
+    <label for="ln">Фамилия:</label>
+    <input type="text" name="lname" id = "ln"  value="" required />
+    <label for="fn">Имя:</label>
+    <input type="text" name="fname" id = "fn"  value="" required />
+    <label for="pn">Отчество:</label>
+    <input type="text" name="pname" id = "pn"  value="" required />
+    <input type="submit"value = "Добавить">
+</form>
+
+
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+
+{% endblock %}
