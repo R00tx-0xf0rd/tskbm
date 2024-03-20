@@ -1,1 +1,1 @@
-from .models import UserModel, WatchesModel, BaseClass
+from .models import UserModel, WatchesModel, BaseClass, BaseUserModel, AllUsersModel
