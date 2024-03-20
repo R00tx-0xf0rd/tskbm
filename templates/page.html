@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block title %}
+tskbm
+{% endblock %}
+
+{% block content %}
+<h1>
+    Приложение учета носимых частей ТСКБМ
+</h1>
+<ul>
+    {% for item in data %}
+    <li>{{item}}</li>
+    {% endfor %}
+</ul>
+{{data[0]["page"]}}
+{% endblock %}
+
+
