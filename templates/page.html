@@ -8,18 +8,33 @@ tskbm
 {% endblock %}
 
 {% block content %}
-<h1>
+<h1 class="display-5">
     Приложение учета носимых частей ТСКБМ
 </h1>
-
+<p id="content">Список машинистов</p>
+<table class="table table-dark table-striped">
+    <tr>
+        <th>Таб. номер</th>
+        <th>Колонна</th>
+        <th>Фамилия</th>
+        <th>Имя</th>
+        <th>Отчество</th>
+    </tr>
 {% for item in data %}
-<p><b>{{ item.lname }} {{ item.fname }} {{item.pname }}: таб. № {{ item.tabnum }}, Колонна: {{ item.column }} </b></p>
-<ul>
+    <tr>
+        <td>{{ item.tabnum }}</td>
+        <td>{{ item.column }}</td>
+        <td>{{ item.lname }}</td>
+        <td>{{ item.fname }}</td>
+        <td>{{item.pname }}</td>
+    </tr>
     {% for value in data["times"] %}
-    <li><b>{{ value["checkout_time" ]}}</b></li>
+    <tr>
+        <td colspan="5">{{ value["checkout_time"] }}</td>
+    </tr>
     {% endfor %}
-</ul>
 {% endfor %}
+</table>
 <p>Total: {{ data.times.__len__() }}</p>
 
 <div><p>extra data: {{ extra }}</p></div>

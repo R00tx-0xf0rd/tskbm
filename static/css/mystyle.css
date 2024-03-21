@@ -1,0 +1,48 @@
+body {
+    min-height: 100vh;
+    position: relative;
+    margin: 0;
+    padding-bottom: 100px; 
+    box-sizing: border-box;
+    color:#000;
+}
+
+.wrapper{
+    max-width: 960px;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    height: 100px;
+    padding-top:50px;
+}
+
+.responsive{
+    max-width: 100%;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+table tr {
+    color: red;
+    border: 1px solid;
+}
+
+.examplebtn {
+  font-family: 'Comfortaa';
+  font-size: 15px;
+  font-weight: bold;
+  color: #ffffff !important;
+  padding: 5px 5px;
+  border-radius: 5px;
+  border: 2px ridge #f3c846;
+  background: #9e220a;
+  background: linear-gradient(to top, #9e220a, #f66d52);
+}
+.examplebtn:hover {
+  color: #cccccc !important;
+  background: #f66d52;
+  background: linear-gradient(to top, #f66d52, #9e220a);
+}

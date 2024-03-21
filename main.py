@@ -17,9 +17,7 @@ from users.crud import create_user, get_all_users, get_user_by_tabnum
 app = FastAPI()
 
 templates = Jinja2Templates(directory="templates")
-
-
-# app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @app.get("/", response_class=HTMLResponse)
