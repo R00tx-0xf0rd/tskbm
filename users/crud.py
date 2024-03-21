@@ -5,7 +5,6 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-
 from db import User, Times
 from db import Watch
 
@@ -23,7 +22,7 @@ async def get_all_users(session: AsyncSession) -> list[BaseUserModel]:
 
 
 async def get_user_by_tabnum(
-    session: AsyncSession, tabnum: int
+        session: AsyncSession, tabnum: int
 ) -> BaseUserModel | None:
     # async with new_session() as session:
     # session.get(User).filter(tabnum == tabnum)
@@ -43,7 +42,7 @@ async def add_watch(session: AsyncSession, serial_number: str) -> int:
 
 
 async def attach_watches_to_user_by_tabnum(
-    session: AsyncSession, tabnum_in: int, watch_serial: str
+        session: AsyncSession, tabnum_in: int, watch_serial: str
 ) -> bool:
     stmt = select(User).filter(User.tabnum == tabnum_in)
     result = await session.execute(stmt)
@@ -70,11 +69,15 @@ async def create_user(session: AsyncSession, user_in: User) -> int:
         print(e)
         # await session.rollback()
         return 0
-    if await create_checkout_time_for_user(session, user_in.id):
+    if await create_checkout_time_for_user(session, user_in.tabnum):
         return user_in.id
 
 
-async def create_checkout_time_for_user(session: AsyncSession, user_id: int) -> bool:
+async def create_checkout_time_for_user(session: AsyncSession, tabnum: int) -> (bool, Times):
+    query = select(User.id).filter(User.tabnum == tabnum)
+    result = await session.execute(query)
+    user_id = result.scalar()
+
     time = Times(user=user_id, checkout_time=datetime.datetime.now())
     session.add(time)
     res = True
@@ -84,7 +87,7 @@ async def create_checkout_time_for_user(session: AsyncSession, user_id: int) -> 
         res = False
     finally:
         # await session.rollback()
-        return res
+        return res, time
 
 
 async def get_id_by_tabnum(session: AsyncSession, tabnum: int) -> int:
