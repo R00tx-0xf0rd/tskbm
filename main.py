@@ -12,7 +12,7 @@ from db import User
 from data_models import UserModel, WatchesModel, BaseUserModel
 from db.database import db_helper
 from times.crud import get_times_via_tabnum
-from users.crud import create_user, get_all_users, get_user_by_tabnum
+from users.crud import create_user, get_all_users, get_user_by_tabnum, create_checkout_time_for_user
 
 app = FastAPI()
 
@@ -55,14 +55,23 @@ async def form_post1(request: Request, tabnum: int = Form(...)):
     )
 
 
+@app.post("/checkout", response_class=HTMLResponse)
+async def make_checkout(request: Request, checkout_tn: int = Form(...)):
+    async with new_session() as session:
+        model = await create_checkout_time_for_user(session, checkout_tn)
+    return templates.TemplateResponse(
+        "forms.html", context={"request": request, "checkout": model, "extra": [1, 2, 3]}
+    )
+
+
 @app.post("/form2", response_class=HTMLResponse)
 async def add_user(
-    request: Request,
-    tabnum: int = Form(...),
-    column: int = Form(...),
-    lname: str = Form(...),
-    fname: str = Form(...),
-    pname: str = Form(...),
+        request: Request,
+        tabnum: int = Form(...),
+        column: int = Form(...),
+        lname: str = Form(...),
+        fname: str = Form(...),
+        pname: str = Form(...),
 ):
     async with new_session() as session:
         user = User(
