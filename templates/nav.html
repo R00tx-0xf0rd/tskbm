@@ -1,40 +1,30 @@
-<ul class="nav">
-  <li class="nav-item {{'active' if active_page == 'unsplash' }}">
-    <a class="nav-link " aria-current="page" href="/">Главная</a>
-  </li>
-  <li class="nav-item {{'active' if active_page == 'unsplash' }}">
-    <a class="nav-link" href="/forms">Формы</a>
-  </li>
-  <li class="nav-item {{'active' if active_page == 'unsplash' }}">
-    <a class="nav-link" href="#">Добавление машиниста</a>
-  </li>
-  <li class="nav-item {{'active' if active_page == 'unsplash' }}">
-    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Отчеты</a>
-  </li>
-</ul>
-
-
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <button type="button" id="sidebarCollapse" class="btn btn-info">
-            <i class="fas fa-align-left"></i>
-        </button>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item {{'active' if active_page == 'unsplash' }}">
-                    <a class="nav-link" href="/unsplash">Unsplash</a>
-                </li>
-                <li class="nav-item {{'active' if active_page == 'twoforms' }}">
-                    <a class="nav-link" href="/twoforms">Two forms</a>
-                </li>
-                <li class="nav-item {{'active' if active_page == 'accordion' }}">
-                    <a class="nav-link" href="/accordion">Accordion</a>
-                </li>
-            </ul>
-        </div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <button type="button" id="sidebarCollapse" class="btn btn-info">
+        <i class="fas fa-align-left"></i>
+    </button>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="/">ТСКБМ</a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item {{'active' if active_page == 'unsplash' }}">
+          <a class="nav-link" href="/">Главная</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{'active' if active_page == 'forms' }}" href="/forms">Формы</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{'active' if active_page == 'unsplash' }}" href="#">Добавить машиниста</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{'active' if active_page == 'unsplash' }}" href="#">Отчеты</a>
+        </li>
+        <li class="nav-item {{'active' if active_page == 'unsplash' }}">
+            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">О нас</a>
+        </li>
+      </ul>
     </div>
+  </div>
 </nav>

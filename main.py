@@ -34,7 +34,7 @@ async def home(request: Request):
 def form_get(request: Request):
     result = "Type a number"
     return templates.TemplateResponse(
-        "forms.html", context={"request": request, "result": result}
+        "forms.html", context={"request": request, "active_page": "forms", "result": result}
     )
 
 

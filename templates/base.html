@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Free Artist Tools by cecilieo.com">
+    <meta name="description" content="com">
     <meta name="author" content="Shinichi Okada">
 
     <title>{% block title %}{% endblock %}</title>
@@ -15,9 +15,10 @@
     <!-- Bootstrap JS + Popper JS -->
     <script defer src="{{ url_for('static', path='/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <!-- Scrollbar Custom CSS -->
-
+    <link type="Image/x-icon" href="{{ url_for('static', path='/images/favicon.ico') }}" rel="icon">
     <!-- Font Awesome JS -->
     <script src="https://kit.fontawesome.com/543c4560e5.js" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', path='/js/index.js') }}" crossorigin="anonymous"></script>
 
     {% endblock %}
 </head>
@@ -30,8 +31,4 @@
 
 </body>
 
-
-<!-- Настройка viewport -->
-
-
-</head>
+</html>
