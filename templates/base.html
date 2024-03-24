@@ -12,6 +12,7 @@
     <title>{% block title %}{% endblock %}</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ url_for('static', path='/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='/bootstrap/css/bootstrap-grid.min.css') }}">
     <!-- Bootstrap JS + Popper JS -->
     <script defer src="{{ url_for('static', path='/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <!-- Scrollbar Custom CSS -->
@@ -25,7 +26,15 @@
 
 <body>
 {% include 'nav.html' %}
+{% block info %}
+
+{% endblock %}
 {% block content %}
+
+
+{% endblock %}
+
+{% block temp %}
 
 {% endblock %}
 

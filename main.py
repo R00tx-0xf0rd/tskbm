@@ -11,8 +11,12 @@ from db import create_tables, delete_tables, new_session
 from db import User
 from data_models import UserModel, WatchesModel, BaseUserModel
 from db.database import db_helper
-from times.crud import get_times_via_tabnum
-from users.crud import create_user, get_all_users, get_user_by_tabnum, create_checkout_time_for_user
+from core.times.crud import get_times_via_tabnum, create_checkout_time_for_user
+from core.users.crud import (
+    create_user,
+    get_all_users,
+    get_user_by_tabnum,
+)
 
 app = FastAPI()
 
@@ -34,7 +38,16 @@ async def home(request: Request):
 def form_get(request: Request):
     result = "Type a number"
     return templates.TemplateResponse(
-        "forms.html", context={"request": request, "active_page": "forms", "result": result}
+        "forms.html",
+        context={"request": request, "active_page": "forms", "result": result},
+    )
+
+
+@app.get("/temp", response_class=HTMLResponse)
+def temp_proc(request: Request):
+    return templates.TemplateResponse(
+        "temp.html",
+        context={"request": request, "active_page": "forms"},
     )
 
 
@@ -60,18 +73,19 @@ async def make_checkout(request: Request, checkout_tn: int = Form(...)):
     async with new_session() as session:
         model = await create_checkout_time_for_user(session, checkout_tn)
     return templates.TemplateResponse(
-        "forms.html", context={"request": request, "checkout": model, "extra": [1, 2, 3]}
+        "forms.html",
+        context={"request": request, "checkout": model, "extra": [1, 2, 3]},
     )
 
 
 @app.post("/form2", response_class=HTMLResponse)
 async def add_user(
-        request: Request,
-        tabnum: int = Form(...),
-        column: int = Form(...),
-        lname: str = Form(...),
-        fname: str = Form(...),
-        pname: str = Form(...),
+    request: Request,
+    tabnum: int = Form(...),
+    column: int = Form(...),
+    lname: str = Form(...),
+    fname: str = Form(...),
+    pname: str = Form(...),
 ):
     async with new_session() as session:
         user = User(

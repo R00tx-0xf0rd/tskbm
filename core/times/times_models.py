@@ -10,7 +10,7 @@ class Period(BaseClass):
 
     @field_serializer("checkout_time")
     def serialize_dt(self, dt: datetime, _info):
-        return datetime.strftime(dt, "%d-%m-%Y")
+        return datetime.strftime(dt, "%d.%m.%Y %H:%M")
 
 
 class UserTimes(BaseClass):

@@ -5,10 +5,10 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from db import User, Times
-from db import Watch
+from db import User
 
 from data_models import UserModel, BaseUserModel, AllUsersModel
+from times.crud import create_checkout_time_for_user
 
 
 async def get_all_users(session: AsyncSession) -> list[BaseUserModel]:
@@ -22,42 +22,14 @@ async def get_all_users(session: AsyncSession) -> list[BaseUserModel]:
 
 
 async def get_user_by_tabnum(
-        session: AsyncSession, tabnum: int
+    session: AsyncSession, tabnum: int
 ) -> BaseUserModel | None:
-    # async with new_session() as session:
-    # session.get(User).filter(tabnum == tabnum)
     query = select(User).filter(User.tabnum == tabnum)
     result = await session.execute(query)
     user = result.scalar()
     if user:
         return BaseUserModel.model_validate(user)
     return None
-
-
-async def add_watch(session: AsyncSession, serial_number: str) -> int:
-    watch = Watch(ser_num=serial_number)
-    session.add(watch)
-    await session.commit()
-    return watch.id
-
-
-async def attach_watches_to_user_by_tabnum(
-        session: AsyncSession, tabnum_in: int, watch_serial: str
-) -> bool:
-    stmt = select(User).filter(User.tabnum == tabnum_in)
-    result = await session.execute(stmt)
-    user = result.scalar()
-    if not user:
-        return False
-    stmt = select(Watch.id).filter(Watch.ser_num == watch_serial)
-    result = await session.execute(stmt)
-    wid = result.scalar()
-    if not wid:
-        return False
-    user.watch_id = wid
-    session.add(user)
-    await session.commit()
-    return True
 
 
 async def create_user(session: AsyncSession, user_in: User) -> int:
@@ -71,23 +43,6 @@ async def create_user(session: AsyncSession, user_in: User) -> int:
         return 0
     if await create_checkout_time_for_user(session, user_in.tabnum):
         return user_in.id
-
-
-async def create_checkout_time_for_user(session: AsyncSession, tabnum: int) -> (bool, Times):
-    query = select(User.id).filter(User.tabnum == tabnum)
-    result = await session.execute(query)
-    user_id = result.scalar()
-
-    time = Times(user=user_id, checkout_time=datetime.datetime.now())
-    session.add(time)
-    res = True
-    try:
-        await session.commit()
-    except IntegrityError:
-        res = False
-    finally:
-        # await session.rollback()
-        return res, time
 
 
 async def get_id_by_tabnum(session: AsyncSession, tabnum: int) -> int:

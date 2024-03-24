@@ -8,103 +8,102 @@
 {% endblock %}
 
 {% block content %}
-{% if data %}
-<div class="container text-center">
-    <div class="row">
-        <div class="col">
-            <p id="content">Сроки поверки ТСКБМ для {{ data.tabnum }}</p>
-            <table class="table table-divider">
-                <caption><p><b>{{ data.lname }} {{ data.fname }} {{data.pname }}: таб. № {{ data.tabnum }}, Колонна: {{
-                    data.column }} </b></p>
-                </caption>
-                <thead>
-                <tr>
-                    <th scope="col">Таб. номер</th>
-                    <th scope="col">Колонна</th>
-                    <th scope="col">Фамилия</th>
-                    <th scope="col">Имя</th>
-                    <th scope="col">Отчество</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for value in data["times"] %}
-                <tr>
-                    <td>{{ value["checkout_time" ]}}</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            <p onclick="doFunction();">Back</p>
+<div class="container">
+    <div class="col col-sm-4">
+        {% if data %}
+        <p id="content">Сроки поверки ТСКБМ для {{ data.tabnum }}</p>
+        <table class="table table-divider">
+            <caption><p><b>{{ data.lname }} {{ data.fname }} {{data.pname }}: таб. № {{ data.tabnum }}, Колонна: {{
+                data.column }} </b></p>
+            </caption>
+            <thead>
+            <tr>
+                <th scope="col">Дата поверки</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for value in data["times"] %}
+            <tr>
+                <td>{{ value["checkout_time" ]}}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <p onclick="doFunction();">Back</p>
+        {% endif %}
 
-            {% endif %}
+        {% if checkout %}
+        <div> Данные приняты</div>
+        <script>
+            setTimeout(function(){
+                  window.location.href = '/forms';
+                }, 50 * 1000);
+            console.log('redirect ok');
+        </script>
+        {% endif %}
 
-            {% if checkout %}
-            <div> Данные{{ checkout }} приняты</div>
-            {% endif %}
-
-            <div class="container-sm">
-                <div class="row mb-3">
-                    <h4>Добавление поверки по т.н.</h4>
-                    <form action="/checkout" method="post">
-                        <div class="col col-sm-3">
-                            <label for="tn">Tabnum:</label>
-                            <input class="form-control form-control-sm" type="text" name="tabnum" id="checkout_tn" value=""
-                                   required/>
-                        </div>
-                        <input type="submit" value="Отправить">
-                    </form>
+        <div class="mb-3">
+            <h4>Добавление поверки по т.н.</h4>
+            <form action="/checkout" method="post">
+                <div class="col col-sm-3">
+                    <label for="tn">Tabnum:</label>
+                    <input class="form-control form-control-sm" type="text" name="checkout_tn" id="checkout_tn"
+                           value=""
+                           required/>
                 </div>
-            </div>
-            <div class="container-sm">
-                <div class="row mb-3">
-                    <h4>Периоды поверки по т.н.</h4>
-                    <form action="/form1" method="post">
-                        <div class="col col-sm-3">
-                            <label for="tn">Tabnum:</label>
-                            <input class="form-control form-control-sm" type="text" name="tabnum" id="tn" value=""
-                                   required/>
-                        </div>
-                        <input type="submit" class="examplebtn" value="Найти" onclick="process()">
-                    </form>
+                <input type="submit" value="Отправить">
+            </form>
+        </div>
+
+
+        <div class="row mb-3">
+            <h4>Периоды поверки по т.н.</h4>
+            <form action="/form1" method="post">
+                <div class="col col-sm-3">
+                    <label for="tn">Tabnum:</label>
+                    <input class="form-control form-control-sm" type="text" name="tabnum" id="tn" value=""
+                           required/>
                 </div>
-            </div>
-            {% if mash %}
-            <br>
-            <div> Пользователь успешно создан.</div>
-            {% endif %}
-            <div class="container-sm">
-                <div class="row mb-4">
-                    <h4>Добавление машиниста в БД</h4>
-                    <div class="col col-sm-3">
-                        <form action="/form2" method="post">
-                            <label for="tn1">Таб. номер:</label>
-                            <input class="form-control form-control-sm" type="text" name="tabnum" id="tn1" value=""
-                                   required/>
-                            <label for="col">Колонна:</label>
-                            <input class="form-control form-control-sm" type="text" name="column" id="col" value=""
-                                   required/>
-                            <label for="ln">Фамилия:</label>
-                            <input class="form-control form-control-sm" type="text" name="lname" id="ln" value=""
-                                   required/>
-                            <label for="fn">Имя:</label>
-                            <input class="form-control form-control-sm" type="text" name="fname" id="fn" value=""
-                                   required/>
-                            <label for="pn">Отчество:</label>
-                            <input class="form-control form-control-sm" type="text" name="pname" id="pn" value=""
-                                   required/>
-                            <button class="btb btn-danger">Help</button>
-                            <input type="submit" value="Добавить">
-                        </form>
-                    </div>
+                <input type="submit" class="examplebtn" value="Найти" onclick="process()">
+            </form>
+        </div>
+
+        {% if mash %}
+        <br>
+        <div> Пользователь успешно создан.</div>
+        {% endif %}
+        <div class="container-sm">
+            <div class="row mb-4">
+                <h4>Добавление машиниста в БД</h4>
+                <div class="col col-sm-3">
+                    <form action="/form2" method="post">
+                        <label for="tn1">Таб. номер:</label>
+                        <input class="form-control form-control-sm" type="text" name="tabnum" id="tn1" value=""
+                               required/>
+                        <label for="col">Колонна:</label>
+                        <input class="form-control form-control-sm" type="text" name="column" id="col" value=""
+                               required/>
+                        <label for="ln">Фамилия:</label>
+                        <input class="form-control form-control-sm" type="text" name="lname" id="ln" value=""
+                               required/>
+                        <label for="fn">Имя:</label>
+                        <input class="form-control form-control-sm" type="text" name="fname" id="fn" value=""
+                               required/>
+                        <label for="pn">Отчество:</label>
+                        <input class="form-control form-control-sm" type="text" name="pname" id="pn" value=""
+                               required/>
+                        <button class="btb btn-danger">Help</button>
+                        <input type="submit" value="Добавить">
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
-            {% endblock %}
+{% endblock %}
 
-            {% block scripts %}
-            {{ super() }}
+{% block scripts %}
+{{ super() }}
 
 
-            {% endblock %}
+{% endblock %}
