@@ -21,6 +21,13 @@ async def get_all_users(session: AsyncSession) -> list[BaseUserModel]:
     return models
 
 
+async def get_col(session: AsyncSession, col: int) -> list[dict]:
+    stmt = select(User).filter(User.column == col)
+    result = await session.execute(stmt)
+    users = result.scalars().all()
+    return [BaseUserModel.model_validate(user).model_dump() for user in users]
+
+
 async def get_user_by_tabnum(
     session: AsyncSession, tabnum: int
 ) -> BaseUserModel | None:

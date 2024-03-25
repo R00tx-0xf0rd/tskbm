@@ -40,6 +40,20 @@
                 </div>
             </div>
             <div class="card panel-primary" style="padding: 4px; margin: 4px;">
+                <h5 class="card-title">Поиск по колонне</h5>
+                <div class="card-body">
+                    <form action="/users" method="get">
+                        <div class="col">
+                            <label for="tn">Колонна:</label>
+                            <input class="form-control form-control-sm" type="text" name="col" id="col_"
+                                   value=""
+                                   required/>
+                        </div>
+                        <input type="submit" class="btn btn-dark" value="Найти" onclick="process()">
+                    </form>
+                </div>
+            </div>
+            <div class="card panel-primary" style="padding: 4px; margin: 4px;">
                 <h5 class="card-title">Добавление машиниста в БД</h5>
                 <div class="card-body">
                     <form class="form" action="/form2" method="post">

@@ -1,34 +1,42 @@
+from contextlib import asynccontextmanager
+
 import uvicorn
-from fastapi import FastAPI, Request, Form
+from fastapi import FastAPI, Request, Form, Depends
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from sqlalchemy.ext.asyncio import AsyncSession
 
-import asyncio
-from sqlalchemy import select
-
-from db import create_tables, delete_tables, new_session
 from db import User
 from data_models import UserModel, WatchesModel, BaseUserModel
 from db.database import db_helper
 from core.times.crud import get_times_via_tabnum, create_checkout_time_for_user
-from core.users.crud import (
-    create_user,
-    get_all_users,
-    get_user_by_tabnum,
-)
+from core.users.crud import create_user
+from core.users.crud import get_all_users
 
-app = FastAPI()
+# routers
+from core.users.views import router as user_router
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
+app.include_router(user_router)
 
 
 @app.get("/", response_class=HTMLResponse)
-async def home(request: Request):
-    async with new_session() as session:
-        users: list[BaseUserModel] = await get_all_users(session)
-        print(users)
+async def home(
+    request: Request,
+    session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+):
+    users: list[BaseUserModel] = await get_all_users(session)
+    print(users)
     return templates.TemplateResponse(
         "page.html", {"request": request, "data": users, "extra": [1, 2, 3]}
     )
@@ -51,27 +59,25 @@ def temp_proc(request: Request):
     )
 
 
-@app.get("/{tabnum}")
-async def get_user_from_tabnum(tabnum: int):
-    async with new_session() as session:
-        user = await get_user_by_tabnum(session, tabnum=tabnum)
-        print(user)
-        return user.model_dump()
-
-
 @app.post("/form1", response_class=HTMLResponse)
-async def form_post1(request: Request, tabnum: int = Form(...)):
-    async with new_session() as session:
-        model = await get_times_via_tabnum(session, tabnum)
+async def form_post1(
+    request: Request,
+    tabnum: int = Form(...),
+    session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+):
+    model = await get_times_via_tabnum(session, tabnum)
     return templates.TemplateResponse(
         "forms.html", context={"request": request, "data": model, "extra": [1, 2, 3]}
     )
 
 
 @app.post("/checkout", response_class=HTMLResponse)
-async def make_checkout(request: Request, checkout_tn: int = Form(...)):
-    async with new_session() as session:
-        model = await create_checkout_time_for_user(session, checkout_tn)
+async def make_checkout(
+    request: Request,
+    checkout_tn: int = Form(...),
+    session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+):
+    model = await create_checkout_time_for_user(session, checkout_tn)
     return templates.TemplateResponse(
         "forms.html",
         context={"request": request, "checkout": model, "extra": [1, 2, 3]},
@@ -86,16 +92,16 @@ async def add_user(
     lname: str = Form(...),
     fname: str = Form(...),
     pname: str = Form(...),
+    session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
-    async with new_session() as session:
-        user = User(
-            tabnum=tabnum,
-            column=column,
-            lname=lname,
-            fname=fname,
-            pname=pname,
-        )
-        mash = await create_user(session, user)
+    user = User(
+        tabnum=tabnum,
+        column=column,
+        lname=lname,
+        fname=fname,
+        pname=pname,
+    )
+    mash = await create_user(session, user)
     return templates.TemplateResponse(
         "forms.html", context={"request": request, "mash": mash, "extra": [1, 2, 3]}
     )
