@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from db import User
 
 from data_models import UserModel, BaseUserModel, AllUsersModel
-from times.crud import create_checkout_time_for_user
+from core.times.crud import create_checkout_time_for_user
 
 
 async def get_all_users(session: AsyncSession) -> list[BaseUserModel]:

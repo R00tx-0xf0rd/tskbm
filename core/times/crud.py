@@ -26,7 +26,7 @@ async def create_checkout_time_for_user(
     if not user_id:
         return False
 
-    time = Times(user=user_id, checkout_time=datetime.datetime.now())
+    time = Times(user=user_id, checkout_time=datetime.now())
     session.add(time)
     res = True
     try:
