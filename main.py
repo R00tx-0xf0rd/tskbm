@@ -8,14 +8,14 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from db import User
-from data_models import UserModel, WatchesModel, BaseUserModel
+from data_models import BaseUserModel
 from db.database import db_helper
-from core.times.crud import get_times_via_tabnum, create_checkout_time_for_user
 from core.users.crud import create_user
 from core.users.crud import get_all_users
 
 # routers
 from core.users.views import router as user_router
+from core.times.views import router as times_router
 
 
 @asynccontextmanager
@@ -27,7 +27,9 @@ app = FastAPI(lifespan=lifespan)
 
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
+# routers
 app.include_router(user_router)
+app.include_router(times_router)
 
 
 @app.get("/", response_model=list[BaseUserModel])
@@ -58,31 +60,6 @@ def temp_proc(request: Request):
     return templates.TemplateResponse(
         "temp.html",
         context={"request": request, "active_page": "forms"},
-    )
-
-
-@app.post("/form1", response_class=HTMLResponse)
-async def form_post1(
-    request: Request,
-    tabnum: int = Form(...),
-    session: AsyncSession = Depends(db_helper.scoped_session_dependency),
-):
-    model = await get_times_via_tabnum(session, tabnum)
-    return templates.TemplateResponse(
-        "forms.html", context={"request": request, "data": model, "extra": [1, 2, 3]}
-    )
-
-
-@app.post("/checkout", response_class=HTMLResponse)
-async def make_checkout(
-    request: Request,
-    checkout_tn: int = Form(...),
-    session: AsyncSession = Depends(db_helper.scoped_session_dependency),
-):
-    model = await create_checkout_time_for_user(session, checkout_tn)
-    return templates.TemplateResponse(
-        "forms.html",
-        context={"request": request, "checkout": model, "extra": [1, 2, 3]},
     )
 
 
