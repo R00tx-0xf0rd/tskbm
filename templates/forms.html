@@ -42,7 +42,7 @@
             <div class="card panel-primary" style="padding: 4px; margin: 4px;">
                 <h5 class="card-title">Поиск по колонне</h5>
                 <div class="card-body">
-                    <form action="/users" method="get">
+                    <form action="/users" method="post">
                         <div class="col">
                             <label for="tn">Колонна:</label>
                             <input class="form-control form-control-sm" type="text" name="col" id="col_"
@@ -101,10 +101,8 @@
             </div>
             <div class="row">
                 {% if data %}
-                <p align="center" id="content">Сроки поверки ТСКБМ для {{ data.lname }} {{ data.fname }} {{data.pname
-                    }}: таб. № {{
-                    data.tabnum }}, Колонна: {{
-                    data.column }}</p>
+                <p align="center" id="content">Сроки поверки ТСКБМ для {{ data.lname }} {{ data.fname }} {{data.pname }}
+                    : таб. № {{ data.tabnum }}, Колонна: {{ data.column }}</p>
                 <table class="table table-divider">
                     <caption><p><b>Итого: {{ data["times"].__len__() }} </b></p>
                     </caption>

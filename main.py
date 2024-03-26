@@ -30,13 +30,15 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 app.include_router(user_router)
 
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/", response_model=list[BaseUserModel])
+# @app.get("/", response_model=list[BaseUserModel])
 async def home(
     request: Request,
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
-    users: list[BaseUserModel] = await get_all_users(session)
-    print(users)
+    models = await get_all_users(session)
+    users = [BaseUserModel.model_validate(user).model_dump() for user in models]
+    # return users
     return templates.TemplateResponse(
         "page.html", {"request": request, "data": users, "extra": [1, 2, 3]}
     )

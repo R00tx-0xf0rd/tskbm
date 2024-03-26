@@ -22,19 +22,16 @@ async def get_times_via_tabnum(session: AsyncSession, tabnum: int) -> dict | Non
 async def create_checkout_time_for_user(
     session: AsyncSession, tabnum: int
 ) -> (bool, Times):
-    query = select(User.id).filter(User.tabnum == tabnum)
+    query = select(User).filter(User.tabnum == tabnum)
     result = await session.execute(query)
-    user_id = result.scalar()
-    if not user_id:
+    user = result.scalar()
+    if not user:
         return False
 
-    time = Times(user=user_id, checkout_time=datetime.now())
+    date = datetime.now()
+    time = Times(user=user.id, checkout_time=date)
+    user.last_checkout = date
     session.add(time)
-    res = True
-    try:
-        await session.commit()
-    except IntegrityError:
-        res = False
-    finally:
-        # await session.rollback()
-        return res
+    await session.commit()
+    return user
+

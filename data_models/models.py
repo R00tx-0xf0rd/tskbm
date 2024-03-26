@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict, field_serializer
+from pydantic import BaseModel, ConfigDict, field_serializer, field_validator
 
 
 class BaseClass(BaseModel):
@@ -13,10 +13,6 @@ class WatchesModel(BaseClass):
 
 
 class BaseUserModel(BaseClass):
-    @field_serializer("last_checkout")
-    def serialize_dt(self, dt: datetime, _info):
-        return datetime.strftime(dt, "%d.%m.%Y %H:%M")
-
     id: int
     tabnum: int
     column: int
@@ -24,6 +20,10 @@ class BaseUserModel(BaseClass):
     fname: str
     pname: str
     last_checkout: datetime
+
+    @field_serializer("last_checkout")
+    def serialize_dt(self, dt: datetime, _info):
+        return datetime.strftime(dt, "%d.%m.%Y %H:%M")
 
 
 class UserModel(BaseUserModel):

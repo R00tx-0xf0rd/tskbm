@@ -1,24 +1,19 @@
 import datetime
 
-from pydantic import ValidationError
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from core.times.crud import create_checkout_time_for_user
+from data_models import BaseUserModel
 from db import User
 
-from data_models import UserModel, BaseUserModel, AllUsersModel
-from core.times.crud import create_checkout_time_for_user
 
-
-async def get_all_users(session: AsyncSession) -> list[BaseUserModel]:
+async def get_all_users(session: AsyncSession) -> list[User]:
     query = select(User).order_by(User.column)
     result = await session.execute(query)
     users = result.scalars().all()
-    print(users)
-    models = [BaseUserModel.model_validate(user) for user in users]
-    # mdls = AllUsersModel.model_validate(users)
-    return models
+    return list(users)
 
 
 async def get_col(session: AsyncSession, col: int) -> list[dict]:
@@ -29,14 +24,12 @@ async def get_col(session: AsyncSession, col: int) -> list[dict]:
 
 
 async def get_user_by_tabnum(
-    session: AsyncSession, tabnum: int
-) -> BaseUserModel | None:
+        session: AsyncSession,
+        tabnum: int
+) -> User | None:
     query = select(User).filter(User.tabnum == tabnum)
     result = await session.execute(query)
-    user = result.scalar()
-    if user:
-        return BaseUserModel.model_validate(user)
-    return None
+    return result.scalar()
 
 
 async def create_user(session: AsyncSession, user_in: User) -> int:
