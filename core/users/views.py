@@ -2,13 +2,13 @@ from fastapi import APIRouter, Form, Request, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.users.crud import get_col, get_user_by_tabnum
-from data_models import UserModel
+from data_models import BaseUserModel
 from db import db_helper
 
 router = APIRouter(prefix="/users")
 
 
-@router.get("/{tabnum}/", response_model=UserModel)
+@router.get("/{tabnum}/", response_model=BaseUserModel)
 async def get_user_from_tabnum(
     tabnum: int,
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
@@ -17,8 +17,7 @@ async def get_user_from_tabnum(
     if user:
         return user
     raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"tabnum {tabnum} not found"
+        status_code=status.HTTP_404_NOT_FOUND, detail=f"tabnum {tabnum} not found"
     )
 
 
