@@ -24,7 +24,7 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(lifespan=lifespan,)#
 
 app.add_middleware(
     CORSMiddleware,
@@ -97,4 +97,4 @@ async def add_user(
 
 if __name__ == "__main__":
     # asyncio.run(tmp())
-    uvicorn.run("main:app", port=8080, reload=True)
+    uvicorn.run("main:app",host="10.123.20.76", port=8080, reload=True)

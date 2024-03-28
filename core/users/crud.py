@@ -4,7 +4,7 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from core.times.crud import create_checkout_time_for_user
+from core.times import create_checkout_time_for_user
 from data_models import BaseUserModel
 from db import User
 

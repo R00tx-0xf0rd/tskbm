@@ -3,7 +3,6 @@ from asyncio import current_task
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession, async_scoped_session
 
 from db.config import settings
-from db.models.tables import Base
 
 
 class DatabaseHelper:
@@ -37,22 +36,8 @@ class DatabaseHelper:
         await session.close()
 
 
+url = "sqlite+aiosqlite:///db.sqlite"
 db_helper = DatabaseHelper(
     url=settings.db_url,
     echo=settings.db_echo,
 )
-
-
-async def create_tables():
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-
-
-async def delete_tables():
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.drop_all)
-
-
-url = "sqlite+aiosqlite:///db.sqlite"
-engine = create_async_engine(url, echo=True)
-new_session = async_sessionmaker(engine, expire_on_commit=False)

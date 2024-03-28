@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, Request, Form
+from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.responses import HTMLResponse
 
-from fastapi.templating import Jinja2Templates
-from core.times.crud import create_checkout_time_for_user, get_times_via_tabnum
+from core.times import create_checkout_time_for_user, get_times_via_tabnum
 from db import db_helper
 
 router = APIRouter(prefix="/times", tags=["times"])
