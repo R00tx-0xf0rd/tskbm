@@ -17,7 +17,6 @@ from core.users.crud import get_all_users
 # routers
 from core.users.views import router as user_router
 from core.times.views import router as times_router
-from core.files.views import router as file_router
 
 
 @asynccontextmanager
@@ -25,9 +24,7 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(
-    lifespan=lifespan,
-)  #
+app = FastAPI(lifespan=lifespan,)#
 
 app.add_middleware(
     CORSMiddleware,
@@ -42,7 +39,6 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 # routers
 app.include_router(user_router)
 app.include_router(times_router)
-app.include_router(file_router)
 
 
 @app.get("/", response_model=list[BaseUserModel])
@@ -101,4 +97,4 @@ async def add_user(
 
 if __name__ == "__main__":
     # asyncio.run(tmp())
-    uvicorn.run("main:app", host="localhost", port=8080, reload=True)
+    uvicorn.run("main:app",host="10.123.20.76", port=8080, reload=True)
