@@ -19,7 +19,8 @@ async def get_times_via_tabnum(session: AsyncSession, tabnum: int) -> dict | Non
 
 
 async def create_checkout_time_for_user(
-    session: AsyncSession, tabnum: int
+    session: AsyncSession,
+    tabnum: int,
 ) -> (bool, Times):
     query = select(User).filter(User.tabnum == tabnum)
     result = await session.execute(query)
@@ -42,4 +43,7 @@ async def create_checkout_time_for_user(
     user.last_checkout = date
     session.add(time)
     await session.commit()
+    users = await session.scalar(User.tabnum)
+    for user in users:
+        print(user)
     return user
